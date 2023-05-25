@@ -2,15 +2,16 @@ import {createSlice} from "@reduxjs/toolkit";
 import {getProduct} from "../../services/productService";
 
 const initialState = {
-    list: [],
+    list: []
 }
 const productSlice = createSlice({
     name: 'products',
     initialState,
     extraReducers: builder => {
-        builder.addCase(getProduct.fulfilled,(state, action)=>{
-            state.list = action.payload
+        builder.addCase(getProduct.fulfilled, (state, action) => {
+            state.list = action.payload;
         })
     }
 });
-export default productSlice.reducer
+
+export default productSlice.reducer;

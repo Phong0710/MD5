@@ -1,48 +1,53 @@
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
-import {getProduct} from "../../services/productService";
+import {deleteProduct, getProduct} from "../../../services/productService";
+import {Link} from "react-router-dom";
 
 export function List() {
     const dispatch = useDispatch();
     const products = useSelector(({products}) => {
-        console.log(products.list)
         return products.list;
     })
     useEffect(() => {
-        dispatch(getProduct())
+        dispatch(getProduct());
     }, [])
+    const submit = (id)=>{
+        dispatch(deleteProduct(id)).then(()=>{
+            dispatch(getProduct())
+        })
+    }
     return (
         <>
-        <table border={1}>
-            <thead>
-
+            <table border={1}>
+                <thead>
                 <tr>
-                    <td>id</td>
+                    <td>Id</td>
                     <td>Name</td>
                     <td>Price</td>
                     <td>Quantity</td>
-                    <td>image</td>
-                    <td>nameCategory</td>
+                    <td>Category</td>
+                    <td colSpan={2}>Action</td>
                 </tr>
-            </thead>
+                </thead>
                 <tbody>
-                {products.map(item => (
-                    <tr>
-                        <td>{item.id}</td>
-                        <td>{item.name}</td>
-                        <td>{item.price}</td>
-                        <td>{item.quantity}</td>
-                        <td>{item.image}</td>
-                        <td>{item.category.name}</td>
+                {
+                    products.map(item => (
+                            <tr key={item.id}>
+                                <td>{item.id}</td>
+                                <td>{item.name}</td>
+                                <td>{item.price}$</td>
+                                <td>{item.quantity}</td>
+                                <td>{item.category.name}</td>
+                                <td><Link to={`/home/edit/${item.id}`}>Edit</Link></td>
+                                <td><button onClick={() => submit(item.id)}>Delete</button></td>
 
-                    </tr>
-                ))}
-
+                            </tr>
+                        )
+                    )
+                }
                 </tbody>
 
-
             </table>
-
         </>
     )
 }

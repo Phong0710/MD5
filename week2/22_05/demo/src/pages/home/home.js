@@ -1,12 +1,12 @@
-import {Navbar} from "../../components/navbar";
-import {Outlet} from "react-router-dom";
 
-export function Home(){
-    return(
+import {Outlet} from 'react-router-dom';
+import {NavBar} from "../../components/navbar";
+
+export function Home() {
+    return (
         <>
-            <Navbar/>
-                <Outlet></Outlet>
-
+            <NavBar/>
+            <Outlet/>
         </>
     )
 }

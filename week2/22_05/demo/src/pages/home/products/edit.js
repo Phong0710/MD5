@@ -1,26 +1,38 @@
 import {useDispatch} from "react-redux";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {Field, Form, Formik} from "formik";
-import {createProduct} from "../../../services/productService";
+import {editProduct} from "../../../services/productService";
+import {useEffect, useState} from "react";
+import customAPI from "../../../services/customAPI";
 
-export function Create() {
+export function Edit() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-
+    const {id} = useParams()
+    console.log(id)
+    const [product, setProduct] = useState({
+        name: '',
+        price: '',
+        quantity: '',
+        image: '',
+        category: '1',
+    })
+    useEffect(() => {
+        customAPI.get(`products/one/${id}`).then((res) => {
+            setProduct(res.data)
+        })
+    }, [])
     return (
         <>
-            <h1>Create product</h1>
+            <h1>Edit product</h1>
             <Formik
-                initialValues={{
-                    name:'',
-                    price:'',
-                    quantity:'',
-                    image:'',
-                    category:'1',
-                    }
-                }
+                initialValues={product}
+                enableReinitialize={true}
                 onSubmit={async (values) => {
-                    await dispatch(createProduct(values))
+                    await dispatch(editProduct({
+                        id: id,
+                        product: values
+                    }))
                     console.log(values)
                     navigate('/home')
                 }}

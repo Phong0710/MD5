@@ -1,14 +1,20 @@
 import {Link, useNavigate} from "react-router-dom";
-import {Field, Form, Formik} from "formik";
+import {Form, Formik, Field} from "formik";
 import {useDispatch} from "react-redux";
-import {login} from "../services/userService";
+import {login} from "../../services/userService";
+
 
 export function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const submit = (user) => {
-        dispatch(login(user)).then(() => {
-            navigate('/home');
+        dispatch(login(user)).then((data) => {
+            if(data.payload === "User is not exist"){
+                localStorage.clear();
+                navigate('/login');
+            } else {
+                navigate('/home');
+            }
         });
     }
     return (
@@ -32,6 +38,7 @@ export function Login() {
                     </Form>
                 </Formik>
             </center>
+
         </>
     )
 }
